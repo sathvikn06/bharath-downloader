@@ -1,9 +1,9 @@
 export type Platform = 'instagram' | 'tiktok' | 'facebook' | 'twitter' | 'youtube' | 'pinterest' | 'unknown';
 
-export type DownloadFormat = 'video/mp4' | 'audio/mp3' | 'image/jpeg';
+export type DownloadFormat = 'video/mp4' | 'audio/mp3' | 'image/jpeg' | 'media/zip';
 export type DownloadQuality = 'highest' | 'high' | 'medium' | 'low';
 
-export type DownloadStatus = 'idle' | 'downloading' | 'syncing' | 'completed' | 'failed';
+export type DownloadStatus = 'idle' | 'preview' | 'downloading' | 'syncing' | 'completed' | 'failed';
 
 export interface DownloadItem {
   id: string;

@@ -1,6 +1,8 @@
 import express from 'express';
 import dl from 'btch-downloader';
 import youtubedl from 'youtube-dl-exec';
+import { ZipArchive } from 'archiver';
+import { Readable } from 'stream';
 
 const app = express();
 app.use(express.json());
@@ -70,6 +72,61 @@ app.get('/api/download', async (req, res) => {
     const { url, format, quality } = req.query;
     if (!url || typeof url !== 'string') return res.status(400).send('URL is required');
 
+    if (format === 'media/zip') {
+        const archive = new ZipArchive({ zlib: { level: 9 } });
+        res.header('Content-Type', 'application/zip');
+        res.header('Content-Disposition', 'attachment; filename="media.zip"');
+        archive.pipe(res);
+        
+        const addUrl = async (urlStr: string, name: string) => {
+            if (!urlStr) return;
+            try {
+                const response = await fetch(urlStr);
+                if (response.ok && response.body) {
+                    archive.append(Readable.fromWeb(response.body), { name });
+                }
+            } catch (e) {
+                console.error("ZIP fetch error:", e.message);
+            }
+        };
+
+        if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            const info = await dl.youtube(url);
+            await addUrl(info?.mp4, 'video.mp4');
+            await addUrl(info?.thumbnail, 'thumbnail.jpg');
+        } else if (url.includes('instagram.com')) {
+            const info = await dl.igdl(url);
+            if (info?.result) {
+                for (let i = 0; i < info.result.length; i++) {
+                   const ext = info.result[i].url?.includes('.jpg') || info.result[i].url?.includes('.webp') ? 'jpg' : 'mp4';
+                   await addUrl(info.result[i].url, `media_${i+1}.${ext}`);
+                   await addUrl(info.result[i].thumbnail, `thumbnail_${i+1}.jpg`);
+                }
+            }
+        } else if (url.includes('tiktok.com')) {
+            const info = await dl.ttdl(url);
+            if (info?.video && info.video.length > 0) await addUrl(info.video[0], 'video.mp4');
+            await addUrl(info?.thumbnail, 'thumbnail.jpg');
+        } else if (url.includes('twitter.com') || url.includes('x.com')) {
+            const info = await dl.twitter(url);
+            if (info && info.length > 0) await addUrl(info[0].url, 'video.mp4');
+        } else if (url.includes('facebook.com') || url.includes('fb.watch')) {
+            const info = await dl.fbdown(url);
+            await addUrl(info?.HD || info?.Normal_video, 'video.mp4');
+        } else if (url.includes('pinterest.com') || url.includes('pin.it')) {
+            try {
+                const info = await dl.pinterest(url);
+                if (info?.result && info.result.url) {
+                    const ext = info.result.url.includes('.mp4') ? 'mp4' : 'jpg';
+                    await addUrl(info.result.url, `media.${ext}`);
+                }
+            } catch (e) {}
+        }
+        
+        await archive.finalize();
+        return;
+    }
+
     let mediaUrl = null;
 
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
@@ -129,9 +186,12 @@ app.get('/api/download', async (req, res) => {
     // fallback to yt-dlp
     let ytdlFormat = format === 'audio/mp3' ? 'bestaudio/best' : format === 'image/jpeg' ? 'best[ext=jpg]/best' : 'best';
     
+    const isInline = req.query.inline === 'true';
+    const disposition = isInline ? 'inline' : 'attachment';
+    
     // send attachment headers before piping
     const fileName = format === 'audio/mp3' ? 'audio.mp3' : format === 'image/jpeg' ? 'image.jpg' : 'download.mp4';
-    res.header('Content-Disposition', `attachment; filename="${fileName}"`);
+    res.header('Content-Disposition', `${disposition}; filename="${fileName}"`);
 
     const subprocess = youtubedl.exec(url, {
       output: '-',
