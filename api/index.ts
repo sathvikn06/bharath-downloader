@@ -36,6 +36,11 @@ app.post('/api/info', async (req, res) => {
        if (info?.url) {
            title = 'Twitter/X Video';
        }
+    } else if (url.includes('pinterest.com') || url.includes('pin.it')) {
+       try {
+         const info = await dl.pinterest(url);
+         title = 'Pinterest Media';
+       } catch (e) {}
     }
 
     // fallback to yt-dlp if thumbnail is missing and it's not IG (since IG blocks yt-dlp)
@@ -69,30 +74,51 @@ app.get('/api/download', async (req, res) => {
 
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
        const info = await dl.youtube(url);
-       if (info?.mp4 || info?.mp3) {
+       if (format === 'image/jpeg') {
+           mediaUrl = info?.thumbnail;
+       } else if (info?.mp4 || info?.mp3) {
            mediaUrl = format === 'audio/mp3' ? (info.mp3 || info.mp4) : (info.mp4 || info.mp3);
        }
     } else if (url.includes('instagram.com')) {
        const info = await dl.igdl(url);
        if (info?.result && info.result.length > 0) {
-           mediaUrl = info.result[0].url;
+           if (format === 'image/jpeg') {
+               mediaUrl = info.result[0].thumbnail || info.result[0].url;
+           } else {
+               mediaUrl = info.result[0].url;
+           }
        }
     } else if (url.includes('tiktok.com')) {
        const info = await dl.ttdl(url);
-       if (info?.video && info.video.length > 0) {
-           mediaUrl = info.video[0]; // TODO: select audio if format=audio/mp3
-       }
-       if (format === 'audio/mp3' && info?.audio && info.audio.length > 0) {
-           mediaUrl = info.audio[0];
+       if (format === 'image/jpeg') {
+           mediaUrl = info?.thumbnail;
+       } else {
+           if (info?.video && info.video.length > 0) {
+               mediaUrl = info.video[0]; // TODO: select audio if format=audio/mp3
+           }
+           if (format === 'audio/mp3' && info?.audio && info.audio.length > 0) {
+               mediaUrl = info.audio[0];
+           }
        }
     } else if (url.includes('facebook.com') || url.includes('fb.watch')) {
-       const info = await dl.fbdown(url);
-       mediaUrl = info?.HD || info?.Normal_video;
-    } else if (url.includes('twitter.com') || url.includes('x.com')) {
-       const info = await dl.twitter(url);
-       if (info && info.length > 0) {
-           mediaUrl = info[0].url;
+       if (format !== 'image/jpeg') {
+           const info = await dl.fbdown(url);
+           mediaUrl = info?.HD || info?.Normal_video;
        }
+    } else if (url.includes('twitter.com') || url.includes('x.com')) {
+       if (format !== 'image/jpeg') {
+           const info = await dl.twitter(url);
+           if (info && info.length > 0) {
+               mediaUrl = info[0].url;
+           }
+       }
+    } else if (url.includes('pinterest.com') || url.includes('pin.it')) {
+       try {
+           const info = await dl.pinterest(url);
+           if (info?.result && info.result.url) {
+               mediaUrl = info.result.url;
+           }
+       } catch (e) {}
     }
 
     if (mediaUrl) {
@@ -101,10 +127,10 @@ app.get('/api/download', async (req, res) => {
     }
 
     // fallback to yt-dlp
-    let ytdlFormat = format === 'audio/mp3' ? 'bestaudio/best' : 'best';
+    let ytdlFormat = format === 'audio/mp3' ? 'bestaudio/best' : format === 'image/jpeg' ? 'best[ext=jpg]/best' : 'best';
     
     // send attachment headers before piping
-    const fileName = format === 'audio/mp3' ? 'audio.mp3' : 'download.mp4';
+    const fileName = format === 'audio/mp3' ? 'audio.mp3' : format === 'image/jpeg' ? 'image.jpg' : 'download.mp4';
     res.header('Content-Disposition', `attachment; filename="${fileName}"`);
 
     const subprocess = youtubedl.exec(url, {

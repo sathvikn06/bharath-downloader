@@ -1,6 +1,6 @@
-export type Platform = 'instagram' | 'tiktok' | 'facebook' | 'twitter' | 'youtube' | 'unknown';
+export type Platform = 'instagram' | 'tiktok' | 'facebook' | 'twitter' | 'youtube' | 'pinterest' | 'unknown';
 
-export type DownloadFormat = 'video/mp4' | 'audio/mp3';
+export type DownloadFormat = 'video/mp4' | 'audio/mp3' | 'image/jpeg';
 export type DownloadQuality = 'highest' | 'high' | 'medium' | 'low';
 
 export type DownloadStatus = 'idle' | 'downloading' | 'syncing' | 'completed' | 'failed';

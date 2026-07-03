@@ -119,6 +119,7 @@ export function DownloaderView() {
               >
                 <option value="video/mp4">Video (MP4)</option>
                 <option value="audio/mp3">Audio (MP3)</option>
+                <option value="image/jpeg">Image (JPG/PNG)</option>
               </select>
               
               <select 
@@ -199,5 +200,6 @@ function detectPlatform(url: string): Platform {
   if (url.includes('facebook.com') || url.includes('fb.watch')) return 'facebook';
   if (url.includes('twitter.com') || url.includes('x.com')) return 'twitter';
   if (url.includes('youtube.com') || url.includes('youtu.be')) return 'youtube';
+  if (url.includes('pinterest.com') || url.includes('pin.it')) return 'pinterest';
   return 'unknown';
 }
