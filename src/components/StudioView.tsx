@@ -87,11 +87,12 @@ function TrimTool() {
       });
       if (!res.ok) {
         let errMessage = 'Failed to trim media';
+        const text = await res.text();
         try {
-          const data = await res.json();
+          const data = JSON.parse(text);
           errMessage = data.error || errMessage;
         } catch (e) {
-          errMessage = await res.text();
+          errMessage = text.slice(0, 200);
         }
         throw new Error(errMessage);
       }
@@ -179,12 +180,12 @@ function VocalTool() {
         body: formData
       });
       
+      const text = await res.text();
       let data: any;
       try {
-        data = await res.json();
+        data = JSON.parse(text);
       } catch (e) {
-        const text = await res.text();
-        throw new Error(`Unexpected response: ${text.slice(0, 100)}...`);
+        if (!res.ok) throw new Error(`Unexpected response: ${text.slice(0, 100)}...`);
       }
       
       if (!res.ok) throw new Error(data?.error || 'Failed to extract vocals');
@@ -215,7 +216,7 @@ function VocalTool() {
 
       <div className="bg-[#d1d5db]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
         <p className="text-xs text-black/60 dark:text-white/60 font-medium">
-          Requires <code className="font-dot">REPLICATE_API_TOKEN</code> in your environment to run Spleeter models.
+          Requires <code className="font-dot">HUGGINGFACE_API_KEY</code> in your environment to run extraction models.
         </p>
       </div>
 
@@ -251,12 +252,12 @@ function CloneTool() {
         body: formData
       });
       
+      const text = await res.text();
       let data: any;
       try {
-        data = await res.json();
+        data = JSON.parse(text);
       } catch (e) {
-        const text = await res.text();
-        throw new Error(`Unexpected response: ${text.slice(0, 100)}...`);
+        if (!res.ok) throw new Error(`Unexpected response: ${text.slice(0, 100)}...`);
       }
       
       if (!res.ok) throw new Error(data?.error || 'Failed to clone voice');
@@ -331,11 +332,12 @@ function MusicTool() {
       });
       if (!res.ok) {
         let errMessage = 'Failed to generate music';
+        const text = await res.text();
         try {
-          const data = await res.json();
+          const data = JSON.parse(text);
           errMessage = data.error || errMessage;
         } catch (e) {
-          errMessage = await res.text();
+          errMessage = text.slice(0, 200);
         }
         throw new Error(errMessage);
       }

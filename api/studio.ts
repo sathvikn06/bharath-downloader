@@ -56,17 +56,17 @@ router.post('/trim', upload.single('file'), (req, res) => {
     .run();
 });
 
-// Vocal Extraction (Mocked/Requires Replicate)
+// Vocal Extraction (Mocked/Requires Hugging Face)
 router.post('/extract-vocals', upload.single('file'), async (req: any, res: any) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
   const inputPath = req.file.path;
 
-  if (!process.env.REPLICATE_API_TOKEN) {
+  if (!process.env.HUGGINGFACE_API_KEY) {
     if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
-    return res.status(400).json({ error: 'Vocal extraction requires REPLICATE_API_TOKEN environment variable.' });
+    return res.status(400).json({ error: 'Vocal extraction requires HUGGINGFACE_API_KEY environment variable.' });
   }
   
-  // Implementation for Replicate would go here
+  // Implementation for Hugging Face would go here
   if (fs.existsSync(inputPath)) fs.unlinkSync(inputPath);
   return res.status(501).json({ error: 'Not fully implemented yet.' });
 });
