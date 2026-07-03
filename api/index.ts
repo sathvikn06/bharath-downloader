@@ -12,36 +12,53 @@ app.post('/api/info', async (req, res) => {
     const { url } = req.body;
     let title = 'Media';
     let thumbnail = '';
+    let media: any[] = [];
 
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
        const info = await dl.youtube(url);
        title = info?.title || title;
        thumbnail = info?.thumbnail || thumbnail;
+       if (info?.mp4) media.push({ url: info.mp4, type: 'video', thumbnail: info.thumbnail });
     } else if (url.includes('instagram.com')) {
        const info = await dl.igdl(url);
        thumbnail = (info?.result && info.result[0]?.thumbnail) || thumbnail;
-       title = 'Instagram Video';
+       title = 'Instagram Post';
+       if (info?.result) {
+           media = info.result.map((m: any) => ({
+               url: m.url,
+               thumbnail: m.thumbnail,
+               type: (m.url?.includes('.jpg') || m.url?.includes('.webp')) ? 'image' : 'video'
+           }));
+       }
     } else if (url.includes('tiktok.com')) {
        const info = await dl.ttdl(url);
        // Check if ttdl is empty
        if (info?.video && info.video.length > 0) {
           title = info?.title || 'TikTok Video';
           thumbnail = info?.thumbnail || thumbnail;
+          media.push({ url: info.video[0], type: 'video', thumbnail });
        }
     } else if (url.includes('facebook.com') || url.includes('fb.watch')) {
        const info = await dl.fbdown(url);
        if (info?.Normal_video || info?.HD) {
            title = 'Facebook Video';
+           const vidUrl = info.HD || info.Normal_video;
+           if (vidUrl) media.push({ url: vidUrl, type: 'video', thumbnail });
        }
     } else if (url.includes('twitter.com') || url.includes('x.com')) {
        const info = await dl.twitter(url);
        if (info?.url) {
            title = 'Twitter/X Video';
+           media.push({ url: info.url, type: 'video', thumbnail });
        }
     } else if (url.includes('pinterest.com') || url.includes('pin.it')) {
        try {
          const info = await dl.pinterest(url);
          title = 'Pinterest Media';
+         if (info?.result && info.result.url) {
+             const isImage = info.result.url.includes('.jpg') || info.result.url.includes('.png');
+             media.push({ url: info.result.url, type: isImage ? 'image' : 'video', thumbnail });
+         }
        } catch (e) {}
     }
 
@@ -55,12 +72,15 @@ app.post('/api/info', async (req, res) => {
            });
            title = info.title || title;
            thumbnail = info.thumbnail || thumbnail;
-       } catch (e) {
+           if (media.length === 0) {
+               media.push({ url: info.url, type: 'video', thumbnail });
+           }
+       } catch (e: any) {
            console.log("yt-dlp fallback failed:", e.message);
        }
     }
 
-    res.json({ title, thumbnail });
+    res.json({ title, thumbnail, media });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch video info' });
@@ -69,62 +89,22 @@ app.post('/api/info', async (req, res) => {
 
 app.get('/api/download', async (req, res) => {
   try {
-    const { url, format, quality } = req.query;
+    const { url, format, quality, direct } = req.query;
     if (!url || typeof url !== 'string') return res.status(400).send('URL is required');
 
-    if (format === 'media/zip') {
-        const archive = new ZipArchive({ zlib: { level: 9 } });
-        res.header('Content-Type', 'application/zip');
-        res.header('Content-Disposition', 'attachment; filename="media.zip"');
-        archive.pipe(res);
-        
-        const addUrl = async (urlStr: string, name: string) => {
-            if (!urlStr) return;
-            try {
-                const response = await fetch(urlStr);
-                if (response.ok && response.body) {
-                    archive.append(Readable.fromWeb(response.body), { name });
-                }
-            } catch (e) {
-                console.error("ZIP fetch error:", e.message);
-            }
-        };
+    const isInline = req.query.inline === 'true';
+    const disposition = isInline ? 'inline' : 'attachment';
 
-        if (url.includes('youtube.com') || url.includes('youtu.be')) {
-            const info = await dl.youtube(url);
-            await addUrl(info?.mp4, 'video.mp4');
-            await addUrl(info?.thumbnail, 'thumbnail.jpg');
-        } else if (url.includes('instagram.com')) {
-            const info = await dl.igdl(url);
-            if (info?.result) {
-                for (let i = 0; i < info.result.length; i++) {
-                   const ext = info.result[i].url?.includes('.jpg') || info.result[i].url?.includes('.webp') ? 'jpg' : 'mp4';
-                   await addUrl(info.result[i].url, `media_${i+1}.${ext}`);
-                   await addUrl(info.result[i].thumbnail, `thumbnail_${i+1}.jpg`);
-                }
-            }
-        } else if (url.includes('tiktok.com')) {
-            const info = await dl.ttdl(url);
-            if (info?.video && info.video.length > 0) await addUrl(info.video[0], 'video.mp4');
-            await addUrl(info?.thumbnail, 'thumbnail.jpg');
-        } else if (url.includes('twitter.com') || url.includes('x.com')) {
-            const info = await dl.twitter(url);
-            if (info && info.length > 0) await addUrl(info[0].url, 'video.mp4');
-        } else if (url.includes('facebook.com') || url.includes('fb.watch')) {
-            const info = await dl.fbdown(url);
-            await addUrl(info?.HD || info?.Normal_video, 'video.mp4');
-        } else if (url.includes('pinterest.com') || url.includes('pin.it')) {
-            try {
-                const info = await dl.pinterest(url);
-                if (info?.result && info.result.url) {
-                    const ext = info.result.url.includes('.mp4') ? 'mp4' : 'jpg';
-                    await addUrl(info.result.url, `media.${ext}`);
-                }
-            } catch (e) {}
+    if (direct === 'true') {
+        const response = await fetch(url);
+        if (response.ok && response.body) {
+            const fileName = format === 'audio/mp3' ? 'audio.mp3' : format === 'image/jpeg' ? 'image.jpg' : 'download.mp4';
+            res.header('Content-Disposition', `${disposition}; filename="${fileName}"`);
+            Readable.fromWeb(response.body as any).pipe(res);
+            return;
+        } else {
+            return res.status(500).send('Direct fetch failed');
         }
-        
-        await archive.finalize();
-        return;
     }
 
     let mediaUrl = null;
@@ -185,9 +165,6 @@ app.get('/api/download', async (req, res) => {
 
     // fallback to yt-dlp
     let ytdlFormat = format === 'audio/mp3' ? 'bestaudio/best' : format === 'image/jpeg' ? 'best[ext=jpg]/best' : 'best';
-    
-    const isInline = req.query.inline === 'true';
-    const disposition = isInline ? 'inline' : 'attachment';
     
     // send attachment headers before piping
     const fileName = format === 'audio/mp3' ? 'audio.mp3' : format === 'image/jpeg' ? 'image.jpg' : 'download.mp4';

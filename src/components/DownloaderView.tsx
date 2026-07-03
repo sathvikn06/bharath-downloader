@@ -149,7 +149,7 @@ export function DownloaderView() {
                 <option value="video/mp4">Video (MP4)</option>
                 <option value="audio/mp3">Audio (MP3)</option>
                 <option value="image/jpeg">Image (JPG/PNG)</option>
-                <option value="media/zip">Combine Image & Video (ZIP)</option>
+                <option value="media/gallery">All Media (Gallery)</option>
               </select>
               
               <select 
@@ -225,34 +225,60 @@ export function DownloaderView() {
 
                   {download.status === 'preview' && (
                     <div className="w-full flex flex-col gap-4 mt-2">
-                      <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 flex items-center justify-center w-full">
-                        {download.format === 'video/mp4' && (
-                          <video src={`/api/download?url=${encodeURIComponent(download.url)}&format=${download.format}&inline=true`} controls className="w-full h-auto max-h-64 rounded" />
-                        )}
-                        {download.format === 'audio/mp3' && (
-                          <audio src={`/api/download?url=${encodeURIComponent(download.url)}&format=${download.format}&inline=true`} controls className="w-full" />
-                        )}
-                        {download.format === 'image/jpeg' && (
-                          <img src={`/api/download?url=${encodeURIComponent(download.url)}&format=${download.format}&inline=true`} alt="Preview" className="w-full h-auto max-h-64 object-contain rounded" />
-                        )}
-                        {download.format === 'media/zip' && download.thumbnail && (
-                          <img src={download.thumbnail} alt="Preview" className="w-full h-auto max-h-64 object-contain rounded" />
-                        )}
-                        {download.format === 'media/zip' && !download.thumbnail && (
-                          <div className="p-8 flex flex-col items-center justify-center text-slate-500">
-                            <Layers className="w-12 h-12 mb-2 opacity-50" />
-                            <span className="text-sm">ZIP Media Package</span>
-                          </div>
-                        )}
-                      </div>
+                      {download.format === 'media/gallery' ? (
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                          {download.media?.map((m, idx) => (
+                            <div key={idx} className="relative group bg-slate-50 dark:bg-slate-900/50 rounded-lg overflow-hidden flex flex-col">
+                              {m.type === 'video' ? (
+                                <video src={`/api/download?url=${encodeURIComponent(m.url)}&format=video/mp4&direct=true&inline=true`} className="w-full h-32 object-cover" />
+                              ) : (
+                                <img src={`/api/download?url=${encodeURIComponent(m.url)}&format=image/jpeg&direct=true&inline=true`} alt={`Media ${idx}`} className="w-full h-32 object-cover" />
+                              )}
+                              <div className="p-2">
+                                <button
+                                  onClick={() => {
+                                    const a = document.createElement('a');
+                                    a.href = `/api/download?url=${encodeURIComponent(m.url)}&format=${m.type === 'video' ? 'video/mp4' : 'image/jpeg'}&direct=true`;
+                                    a.download = '';
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                  }}
+                                  className="w-full bg-light-blue dark:bg-cm-gold text-white dark:text-cm-blue px-2 py-1.5 rounded text-xs font-bold flex items-center justify-center gap-1 hover:opacity-90"
+                                >
+                                  <Download className="w-3 h-3" />
+                                  Download
+                                </button>
+                              </div>
+                            </div>
+                          ))}
+                          {(!download.media || download.media.length === 0) && (
+                            <div className="col-span-full p-4 text-center text-sm text-slate-500">No media found.</div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2 flex items-center justify-center w-full">
+                          {download.format === 'video/mp4' && (
+                            <video src={`/api/download?url=${encodeURIComponent(download.url)}&format=${download.format}&inline=true`} controls className="w-full h-auto max-h-64 rounded" />
+                          )}
+                          {download.format === 'audio/mp3' && (
+                            <audio src={`/api/download?url=${encodeURIComponent(download.url)}&format=${download.format}&inline=true`} controls className="w-full" />
+                          )}
+                          {download.format === 'image/jpeg' && (
+                            <img src={`/api/download?url=${encodeURIComponent(download.url)}&format=${download.format}&inline=true`} alt="Preview" className="w-full h-auto max-h-64 object-contain rounded" />
+                          )}
+                        </div>
+                      )}
                       
-                      <button
-                        onClick={() => executeDownload(download)}
-                        className="w-full bg-light-blue dark:bg-cm-gold text-white dark:text-cm-blue px-4 py-2.5 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-                      >
-                        <Download className="w-4 h-4" />
-                        <span>Download Now</span>
-                      </button>
+                      {download.format !== 'media/gallery' && (
+                        <button
+                          onClick={() => executeDownload(download)}
+                          className="w-full bg-light-blue dark:bg-cm-gold text-white dark:text-cm-blue px-4 py-2.5 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+                        >
+                          <Download className="w-4 h-4" />
+                          <span>Download Now</span>
+                        </button>
+                      )}
                     </div>
                   )}
                 </motion.div>
