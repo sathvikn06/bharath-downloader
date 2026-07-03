@@ -1,0 +1,8 @@
+{
+  "name": "Bharat Downloader",
+  "description": "A cinematic, secure, and private social media downloader with a Bharath Ane Nenu inspired heroic theme.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
