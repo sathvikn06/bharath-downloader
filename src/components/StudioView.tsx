@@ -85,7 +85,16 @@ function TrimTool() {
         method: 'POST',
         body: formData
       });
-      if (!res.ok) throw new Error('Failed to trim media');
+      if (!res.ok) {
+        let errMessage = 'Failed to trim media';
+        try {
+          const data = await res.json();
+          errMessage = data.error || errMessage;
+        } catch (e) {
+          errMessage = await res.text();
+        }
+        throw new Error(errMessage);
+      }
       
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -169,8 +178,16 @@ function VocalTool() {
         method: 'POST',
         body: formData
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to extract vocals');
+      
+      let data: any;
+      try {
+        data = await res.json();
+      } catch (e) {
+        const text = await res.text();
+        throw new Error(`Unexpected response: ${text.slice(0, 100)}...`);
+      }
+      
+      if (!res.ok) throw new Error(data?.error || 'Failed to extract vocals');
       alert('Vocals extracted successfully (not fully implemented)');
     } catch (err: any) {
       alert(err.message);
@@ -196,7 +213,7 @@ function VocalTool() {
         </div>
       </div>
 
-      <div className="bg-[#F2F2ED]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
+      <div className="bg-[#e5e7eb]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
         <p className="text-xs text-black/60 dark:text-white/60 font-medium">
           Requires <code className="font-dot">REPLICATE_API_TOKEN</code> in your environment to run Spleeter models.
         </p>
@@ -233,8 +250,16 @@ function CloneTool() {
         method: 'POST',
         body: formData
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to clone voice');
+      
+      let data: any;
+      try {
+        data = await res.json();
+      } catch (e) {
+        const text = await res.text();
+        throw new Error(`Unexpected response: ${text.slice(0, 100)}...`);
+      }
+      
+      if (!res.ok) throw new Error(data?.error || 'Failed to clone voice');
       alert('Voice cloned successfully (not fully implemented)');
     } catch (err: any) {
       alert(err.message);
@@ -271,7 +296,7 @@ function CloneTool() {
         />
       </div>
 
-      <div className="bg-[#F2F2ED]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
+      <div className="bg-[#e5e7eb]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
         <p className="text-xs text-black/60 dark:text-white/60 font-medium">
           Requires <code className="font-dot">ELEVENLABS_API_KEY</code> in your environment to run cloning API.
         </p>
@@ -305,8 +330,14 @@ function MusicTool() {
         body: JSON.stringify({ prompt })
       });
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || 'Failed to generate music');
+        let errMessage = 'Failed to generate music';
+        try {
+          const data = await res.json();
+          errMessage = data.error || errMessage;
+        } catch (e) {
+          errMessage = await res.text();
+        }
+        throw new Error(errMessage);
       }
       
       const blob = await res.blob();
@@ -335,7 +366,7 @@ function MusicTool() {
         />
       </div>
 
-      <div className="bg-[#F2F2ED]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
+      <div className="bg-[#e5e7eb]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
         <p className="text-xs text-black/60 dark:text-white/60 font-medium">
           Requires <code className="font-dot">MUSIC_API_KEY</code> or <code className="font-dot">GEMINI_API_KEY</code> in your environment.
         </p>

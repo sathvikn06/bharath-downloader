@@ -15,7 +15,7 @@ export default function App() {
   return (
     <div className="min-h-screen font-sans flex flex-col selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
       {/* Top Nav */}
-      <nav className="w-full px-6 py-5 flex justify-between items-center border-b border-black/10 dark:border-white/10 bg-transparent sticky top-0 z-50 bg-[#F2F2ED]/80 dark:bg-[#111111]/80 backdrop-blur-md">
+      <nav className="w-full px-6 py-5 flex justify-between items-center border-b border-black/10 dark:border-white/10 bg-transparent sticky top-0 z-50 bg-[#e5e7eb]/80 dark:bg-[#111111]/80 backdrop-blur-md">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <Grid2x2 className="w-6 h-6" />
           <span className="font-dot font-bold text-lg tracking-tight uppercase">Media Engine</span>
@@ -54,7 +54,7 @@ export default function App() {
           {/* Subtle line through the background */}
           <div className="absolute top-1/2 left-0 w-full h-px bg-black/10 dark:bg-white/10 -z-10"></div>
           
-          <h1 className="text-6xl sm:text-8xl md:text-9xl font-dot tracking-widest uppercase bg-[#F2F2ED] dark:bg-[#111111] px-4 md:px-8 mx-auto inline-block">
+          <h1 className="text-6xl sm:text-8xl md:text-9xl font-dot tracking-widest uppercase bg-[#e5e7eb] dark:bg-[#111111] px-4 md:px-8 mx-auto inline-block">
             FETCH. TRIM.<br className="hidden md:block"/> CLONE.
           </h1>
         </motion.div>
@@ -64,19 +64,19 @@ export default function App() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-2xl bg-[#F2F2ED] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 relative z-10 scroll-mt-24"
+          className="w-full max-w-2xl bg-[#e5e7eb] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 relative z-10 scroll-mt-24"
         >
           {/* Connection Nodes */}
-          <div className="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 bg-[#F2F2ED] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
+          <div className="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 bg-[#e5e7eb] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
              <div className="w-2 h-2 bg-black dark:bg-white rounded-full"></div>
           </div>
-          <div className="absolute top-1/2 -right-3 -translate-y-1/2 w-6 h-6 bg-[#F2F2ED] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
+          <div className="absolute top-1/2 -right-3 -translate-y-1/2 w-6 h-6 bg-[#e5e7eb] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
              <div className="w-2 h-2 bg-black dark:bg-white rounded-full"></div>
           </div>
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#F2F2ED] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#e5e7eb] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
              <div className="w-2 h-2 bg-black dark:bg-white rounded-full"></div>
           </div>
-          <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#F2F2ED] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
+          <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#e5e7eb] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
              <div className="w-2 h-2 bg-black dark:bg-white rounded-full"></div>
           </div>
 
@@ -90,7 +90,7 @@ export default function App() {
           className="text-center w-full mt-16 mb-16 relative"
         >
           <div className="absolute top-1/2 left-0 w-full h-px bg-black/10 dark:bg-white/10 -z-10"></div>
-          <h1 className="text-5xl sm:text-7xl md:text-8xl font-dot tracking-widest uppercase bg-[#F2F2ED] dark:bg-[#111111] px-4 md:px-8 mx-auto inline-block">
+          <h1 className="text-5xl sm:text-7xl md:text-8xl font-dot tracking-widest uppercase bg-[#e5e7eb] dark:bg-[#111111] px-4 md:px-8 mx-auto inline-block">
             STUDIO.
           </h1>
         </motion.div>
@@ -100,19 +100,19 @@ export default function App() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-2xl bg-[#F2F2ED] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 relative z-10 scroll-mt-24"
+          className="w-full max-w-2xl bg-[#e5e7eb] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 relative z-10 scroll-mt-24"
         >
           {/* Connection Nodes */}
-          <div className="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 bg-[#F2F2ED] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
+          <div className="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 bg-[#e5e7eb] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
              <div className="w-2 h-2 bg-black dark:bg-white rounded-full"></div>
           </div>
-          <div className="absolute top-1/2 -right-3 -translate-y-1/2 w-6 h-6 bg-[#F2F2ED] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
+          <div className="absolute top-1/2 -right-3 -translate-y-1/2 w-6 h-6 bg-[#e5e7eb] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
              <div className="w-2 h-2 bg-black dark:bg-white rounded-full"></div>
           </div>
-          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#F2F2ED] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#e5e7eb] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
              <div className="w-2 h-2 bg-black dark:bg-white rounded-full"></div>
           </div>
-          <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#F2F2ED] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
+          <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-[#e5e7eb] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
              <div className="w-2 h-2 bg-black dark:bg-white rounded-full"></div>
           </div>
           <StudioView />

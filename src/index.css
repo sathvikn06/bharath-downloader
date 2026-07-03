@@ -9,11 +9,11 @@
 }
 
 body {
-  @apply bg-[#F2F2ED] text-[#111111] transition-colors duration-300;
+  @apply bg-[#e5e7eb] text-[#111111] transition-colors duration-300;
 }
 
 .dark body {
-  @apply bg-[#111111] text-[#F2F2ED];
+  @apply bg-[#111111] text-[#e5e7eb];
 }
 
 /* Custom Scrollbar */

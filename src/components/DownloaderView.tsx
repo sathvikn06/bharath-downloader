@@ -152,7 +152,7 @@ export function DownloaderView() {
             initial={{ opacity: 0, y: 10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="border border-black/10 dark:border-white/10 rounded-2xl p-5 shadow-sm overflow-hidden bg-[#F2F2ED]/50 dark:bg-[#111]/50 backdrop-blur-sm relative"
+            className="border border-black/10 dark:border-white/10 rounded-2xl p-5 shadow-sm overflow-hidden bg-[#e5e7eb]/50 dark:bg-[#111]/50 backdrop-blur-sm relative"
           >
             {/* Minimal line overlay */}
             <div className="absolute top-0 left-8 w-px h-full bg-black/5 dark:bg-white/5 pointer-events-none"></div>
