@@ -213,7 +213,7 @@ function VocalTool() {
         </div>
       </div>
 
-      <div className="bg-[#e5e7eb]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
+      <div className="bg-[#d1d5db]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
         <p className="text-xs text-black/60 dark:text-white/60 font-medium">
           Requires <code className="font-dot">REPLICATE_API_TOKEN</code> in your environment to run Spleeter models.
         </p>
@@ -296,7 +296,7 @@ function CloneTool() {
         />
       </div>
 
-      <div className="bg-[#e5e7eb]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
+      <div className="bg-[#d1d5db]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
         <p className="text-xs text-black/60 dark:text-white/60 font-medium">
           Requires <code className="font-dot">ELEVENLABS_API_KEY</code> in your environment to run cloning API.
         </p>
@@ -366,7 +366,7 @@ function MusicTool() {
         />
       </div>
 
-      <div className="bg-[#e5e7eb]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
+      <div className="bg-[#d1d5db]/50 dark:bg-[#111]/50 border border-black/10 dark:border-white/10 p-4 rounded-xl">
         <p className="text-xs text-black/60 dark:text-white/60 font-medium">
           Requires <code className="font-dot">MUSIC_API_KEY</code> or <code className="font-dot">GEMINI_API_KEY</code> in your environment.
         </p>
