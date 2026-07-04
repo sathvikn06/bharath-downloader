@@ -82,6 +82,7 @@ export function DownloaderView() {
     const a = document.createElement('a');
     a.href = downloadUrl;
     a.download = '';
+    a.target = '_blank';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -101,40 +102,42 @@ export function DownloaderView() {
 
   return (
     <div className="flex flex-col gap-10 w-full relative z-10">
-      <form onSubmit={handleProcess} className="relative">
+      <form onSubmit={handleProcess} className="relative flex flex-col sm:block gap-4">
         <input
           type="url"
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Paste media link here..."
-          className="w-full bg-transparent border-b-2 border-black/20 dark:border-white/20 px-4 py-4 pr-32 sm:pr-80 text-xl md:text-2xl focus:border-black dark:focus:border-white outline-none transition-all placeholder:text-black/30 dark:placeholder:text-white/30 font-sans"
+          className="w-full bg-transparent border-b-2 border-black/20 dark:border-white/20 px-4 py-4 sm:pr-80 text-lg sm:text-xl md:text-2xl focus:border-black dark:focus:border-white outline-none transition-all placeholder:text-black/30 dark:placeholder:text-white/30 font-sans"
           required
         />
-        <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-4">
-          <select 
-            value={quality}
-            onChange={(e) => setQuality(e.target.value as DownloadQuality)}
-            className="bg-transparent border-none text-xs font-dot uppercase tracking-widest text-black/60 dark:text-white/60 focus:ring-0 outline-none cursor-pointer hidden sm:block appearance-none pr-4"
-          >
-            <option value="highest">HQ</option>
-            <option value="high">1080P</option>
-            <option value="medium">720P</option>
-            <option value="low">480P</option>
-          </select>
-          <select 
-            value={format}
-            onChange={(e) => setFormat(e.target.value as DownloadFormat)}
-            className="bg-transparent border-none text-xs font-dot uppercase tracking-widest text-black/60 dark:text-white/60 focus:ring-0 outline-none cursor-pointer hidden sm:block appearance-none pr-4"
-          >
-            <option value="video/mp4">MP4</option>
-            <option value="audio/mp3">MP3</option>
-            <option value="image/jpeg">JPG</option>
-            <option value="media/gallery">ALL</option>
-          </select>
+        <div className="sm:absolute sm:right-0 sm:top-1/2 sm:-translate-y-1/2 flex flex-wrap items-center justify-between sm:justify-end gap-2 sm:gap-4 w-full sm:w-auto">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <select 
+              value={quality}
+              onChange={(e) => setQuality(e.target.value as DownloadQuality)}
+              className="bg-black/5 dark:bg-white/5 sm:bg-transparent border border-black/10 dark:border-white/10 sm:border-none text-xs font-dot uppercase tracking-widest text-black/80 dark:text-white/80 sm:text-black/60 sm:dark:text-white/60 focus:ring-0 outline-none cursor-pointer appearance-none px-3 py-2 sm:p-0 rounded-full sm:rounded-none pr-8 sm:pr-4"
+            >
+              <option value="highest">HQ</option>
+              <option value="high">1080P</option>
+              <option value="medium">720P</option>
+              <option value="low">480P</option>
+            </select>
+            <select 
+              value={format}
+              onChange={(e) => setFormat(e.target.value as DownloadFormat)}
+              className="bg-black/5 dark:bg-white/5 sm:bg-transparent border border-black/10 dark:border-white/10 sm:border-none text-xs font-dot uppercase tracking-widest text-black/80 dark:text-white/80 sm:text-black/60 sm:dark:text-white/60 focus:ring-0 outline-none cursor-pointer appearance-none px-3 py-2 sm:p-0 rounded-full sm:rounded-none pr-8 sm:pr-4"
+            >
+              <option value="video/mp4">MP4</option>
+              <option value="audio/mp3">MP3</option>
+              <option value="image/jpeg">JPG</option>
+              <option value="media/gallery">ALL</option>
+            </select>
+          </div>
           <button
             type="submit"
             disabled={!url.trim() || isProcessing}
-            className="bg-black dark:bg-white text-white dark:text-black px-6 py-2 rounded-full font-medium text-sm hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center gap-2"
+            className="w-full sm:w-auto bg-black dark:bg-white text-white dark:text-black px-6 py-3 sm:py-2 rounded-full font-medium text-sm hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
           >
             {isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Grid2x2 className="w-4 h-4" />}
             <span className="font-dot tracking-widest uppercase">PROCESS</span>
@@ -142,36 +145,17 @@ export function DownloaderView() {
         </div>
       </form>
       <AnimatePresence>
-         {(url.includes('youtube.com') || url.includes('youtu.be') || url.includes('tiktok.com')) && (quality === 'highest' || quality === 'high') && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="text-[10px] font-mono text-black/50 dark:text-white/50 -mt-8 px-4">
+         {(url.includes('youtube.com') || url.includes('youtu.be')) && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="text-[10px] font-mono text-amber-600 dark:text-amber-500 -mt-2 sm:-mt-8 px-4">
+               Note: YouTube video quality is currently limited. It is recommended that only YouTube audio (MP3) be downloaded.
+            </motion.div>
+         )}
+         {url.includes('tiktok.com') && (quality === 'highest' || quality === 'high') && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="text-[10px] font-mono text-black/50 dark:text-white/50 -mt-2 sm:-mt-8 px-4">
                Note: 1080p may be unavailable for this platform due to bot-protections. The highest available standard resolution will be downloaded.
             </motion.div>
          )}
       </AnimatePresence>
-
-      {/* Format Selector Mobile */}
-      <div className="flex justify-center sm:hidden">
-        <select 
-          value={quality}
-          onChange={(e) => setQuality(e.target.value as DownloadQuality)}
-          className="bg-transparent border-none text-xs font-dot uppercase tracking-widest focus:ring-0 outline-none"
-        >
-          <option value="highest">HQ</option>
-          <option value="high">1080P</option>
-          <option value="medium">720P</option>
-          <option value="low">480P</option>
-        </select>
-        <select 
-          value={format}
-          onChange={(e) => setFormat(e.target.value as DownloadFormat)}
-          className="bg-transparent border-none text-xs font-dot uppercase tracking-widest focus:ring-0 outline-none"
-        >
-          <option value="video/mp4">MP4</option>
-          <option value="audio/mp3">MP3</option>
-          <option value="image/jpeg">JPG</option>
-          <option value="media/gallery">ALL</option>
-        </select>
-      </div>
 
       <AnimatePresence>
         {activeDownloads.map(download => (
@@ -263,6 +247,7 @@ export function DownloaderView() {
                                   const a = document.createElement('a');
                                   a.href = `/api/download?url=${encodeURIComponent(m.url)}&format=${m.type === 'video' ? 'video/mp4' : 'image/jpeg'}&quality=${encodeURIComponent(download.quality)}&direct=true`;
                                   a.download = '';
+                                  a.target = '_blank';
                                   document.body.appendChild(a);
                                   a.click();
                                   document.body.removeChild(a);

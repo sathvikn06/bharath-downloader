@@ -17,7 +17,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen font-sans flex flex-col selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
+    <div className="min-h-screen font-sans flex flex-col selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black bg-[#d1d5db] dark:bg-[#111111] relative">
       {/* Top Nav */}
       <nav className="w-full px-6 py-5 flex justify-between items-center border-b border-black/10 dark:border-white/10 bg-transparent sticky top-0 z-50 bg-[#d1d5db]/80 dark:bg-[#111111]/80 backdrop-blur-md">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -46,7 +46,7 @@ export default function App() {
       </nav>
 
       {/* Main Layout */}
-      <main className="flex-1 w-full max-w-5xl mx-auto px-4 flex flex-col items-center pt-20 pb-20 overflow-hidden">
+      <main className="relative z-10 flex-1 w-full max-w-5xl mx-auto px-4 flex flex-col items-center pt-20 pb-20 overflow-hidden">
         
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -57,8 +57,8 @@ export default function App() {
           {/* Subtle line through the background */}
           <div className="absolute top-1/2 left-0 w-full h-px bg-black/10 dark:bg-white/10 -z-10"></div>
           
-          <h1 className="text-6xl sm:text-7xl md:text-8xl font-dot tracking-widest uppercase bg-[#d1d5db] dark:bg-[#111111] px-4 md:px-8 mx-auto inline-block">
-            DOWNLOAD.<br className="hidden md:block"/> ANYTHING.
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-dot tracking-widest uppercase bg-[#d1d5db]/60 dark:bg-[#111111]/60 backdrop-blur-md px-4 sm:px-6 md:px-8 mx-auto inline-block rounded-xl">
+            DOWNLOAD.<br className="hidden sm:block"/> ANYTHING.
           </h1>
         </motion.div>
 
@@ -67,7 +67,7 @@ export default function App() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-2xl bg-[#d1d5db] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 relative z-10 scroll-mt-24 mb-16"
+          className="w-full max-w-2xl bg-[#d1d5db]/70 dark:bg-[#111111]/70 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 relative z-10 scroll-mt-24 mb-16"
         >
           {/* Connection Nodes */}
           <div className="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 bg-[#d1d5db] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
@@ -92,7 +92,7 @@ export default function App() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-2xl bg-[#d1d5db] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 relative z-10 scroll-mt-24 mb-16"
+          className="w-full max-w-2xl bg-[#d1d5db]/70 dark:bg-[#111111]/70 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 relative z-10 scroll-mt-24 mb-16"
         >
           {/* Connection Nodes */}
           <div className="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 bg-[#d1d5db] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
@@ -117,7 +117,7 @@ export default function App() {
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="w-full max-w-2xl bg-[#d1d5db] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 relative z-10 scroll-mt-24"
+          className="w-full max-w-2xl bg-[#d1d5db]/70 dark:bg-[#111111]/70 backdrop-blur-md border border-black/10 dark:border-white/10 rounded-[2rem] p-6 sm:p-10 relative z-10 scroll-mt-24"
         >
           {/* Connection Nodes */}
           <div className="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-6 bg-[#d1d5db] dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-full flex items-center justify-center">
@@ -145,7 +145,7 @@ export default function App() {
       
       {/* Footer */}
       <StrawHatCrew />
-      <footer className="w-full border-t border-black/10 dark:border-white/10 py-8 text-center bg-[#c2c6cc] dark:bg-[#0a0a0a]">
+      <footer className="relative z-10 w-full border-t border-black/10 dark:border-white/10 py-8 text-center bg-[#c2c6cc]/70 dark:bg-[#0a0a0a]/70 backdrop-blur-md">
          <div className="flex items-center justify-center gap-2 text-black/50 dark:text-white/50 text-xs font-dot tracking-widest uppercase">
             <Grid2x2 className="w-4 h-4" />
             <span>Media Engine © 2026</span>

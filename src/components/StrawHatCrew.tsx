@@ -31,7 +31,7 @@ export function StrawHatCrew() {
             key={i}
             src={member.url} 
             alt={member.name} 
-            className="h-16 sm:h-24 object-contain"
+            className="h-16 sm:h-24 object-contain drop-shadow-[0_0_2px_rgba(0,0,0,0.5)] dark:drop-shadow-[0_0_2px_rgba(255,255,255,0.5)]"
           />
         ))}
       </motion.div>

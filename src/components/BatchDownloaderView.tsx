@@ -74,30 +74,32 @@ export function BatchDownloaderView() {
           />
         </div>
 
-        <div className="flex items-center gap-4">
-          <select 
-            value={quality}
-            onChange={(e) => setQuality(e.target.value)}
-            className="bg-transparent border-none text-xs font-dot uppercase tracking-widest text-black/60 dark:text-white/60 focus:ring-0 outline-none cursor-pointer appearance-none pr-4"
-          >
-            <option value="highest">HQ</option>
-            <option value="high">1080P</option>
-            <option value="medium">720P</option>
-            <option value="low">480P</option>
-          </select>
-          <select 
-            value={format}
-            onChange={(e) => setFormat(e.target.value)}
-            className="bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs font-dot uppercase tracking-widest focus:ring-0 outline-none rounded-full px-4 py-2"
-          >
-            <option value="video/mp4">MP4 Video</option>
-            <option value="audio/mp3">MP3 Audio</option>
-          </select>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          <div className="flex items-center gap-4 flex-1">
+            <select 
+              value={quality}
+              onChange={(e) => setQuality(e.target.value)}
+              className="flex-1 sm:flex-none bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs font-dot uppercase tracking-widest focus:ring-0 outline-none rounded-full px-4 py-2 appearance-none"
+            >
+              <option value="highest">HQ</option>
+              <option value="high">1080P</option>
+              <option value="medium">720P</option>
+              <option value="low">480P</option>
+            </select>
+            <select 
+              value={format}
+              onChange={(e) => setFormat(e.target.value)}
+              className="flex-1 sm:flex-none bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs font-dot uppercase tracking-widest focus:ring-0 outline-none rounded-full px-4 py-2 appearance-none"
+            >
+              <option value="video/mp4">MP4 Video</option>
+              <option value="audio/mp3">MP3 Audio</option>
+            </select>
+          </div>
 
           <button
             type="submit"
             disabled={isProcessing || urls.trim().length === 0}
-            className="flex-1 bg-black text-white dark:bg-white dark:text-black px-6 py-2.5 rounded-full text-xs font-bold tracking-widest hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2"
+            className="sm:flex-1 bg-black text-white dark:bg-white dark:text-black px-6 py-3 sm:py-2.5 rounded-full text-xs font-bold tracking-widest hover:scale-105 active:scale-95 transition-transform disabled:opacity-50 disabled:hover:scale-100 flex items-center justify-center gap-2"
           >
             {isProcessing ? (
               <>
@@ -114,7 +116,12 @@ export function BatchDownloaderView() {
         </div>
       </form>
       <AnimatePresence>
-         {(urls.includes('youtube.com') || urls.includes('youtu.be') || urls.includes('tiktok.com')) && (quality === 'highest' || quality === 'high') && (
+         {(urls.includes('youtube.com') || urls.includes('youtu.be')) && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="text-[10px] font-mono text-amber-600 dark:text-amber-500 -mt-2 px-4">
+               Note: YouTube video quality is currently limited. It is recommended that only YouTube audio (MP3) be downloaded.
+            </motion.div>
+         )}
+         {urls.includes('tiktok.com') && (quality === 'highest' || quality === 'high') && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="text-[10px] font-mono text-black/50 dark:text-white/50 -mt-2 px-4">
                Note: 1080p may be unavailable for some platforms due to bot-protections. The highest available standard resolution will be downloaded.
             </motion.div>
