@@ -2,7 +2,8 @@ import express from 'express';
 import path from 'path';
 import { createServer as createViteServer } from 'vite';
 import apiRouter from './api/index.js'; // The Vercel endpoint
-import studioRouter from './api/studio.js';
+import analyzeRouter from './api/analyze.js';
+import batchRouter from './api/batch.js';
 
 async function startServer() {
   const app = express();
@@ -10,8 +11,9 @@ async function startServer() {
 
   // Mount the API router from api/index.ts
   app.use(apiRouter);
-  app.use('/api/studio', studioRouter);
-
+  app.use(express.json());
+  app.use('/api/analyze', analyzeRouter);
+  app.use('/api/batch', batchRouter);
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

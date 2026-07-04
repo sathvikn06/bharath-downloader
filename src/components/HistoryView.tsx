@@ -1,6 +1,6 @@
 import React from 'react';
 import { format } from 'timeago.js';
-import { Youtube, Instagram, Facebook, Twitter, Music, HelpCircle, FileVideo, Download, RefreshCw, Trash2 } from 'lucide-react';
+import { Youtube, Instagram, Facebook, Twitter, Music, HelpCircle, FileVideo, Download, RefreshCw, Trash2, History as HistoryIcon } from 'lucide-react';
 import { useHistory } from '../hooks/useStorage';
 import { Platform, DownloadItem } from '../types';
 
@@ -29,7 +29,6 @@ export function HistoryView() {
           Clear Registry
         </button>
       </div>
-
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {history.map((item) => (
           <HistoryCard key={item.id} item={item} />
@@ -67,11 +66,9 @@ function HistoryCard({ item }: { item: DownloadItem; key?: React.Key }) {
           </div>
         </div>
       </div>
-
       <div className="bg-slate-50 dark:bg-slate-900/50 rounded-lg p-2.5 text-xs font-mono text-slate-600 dark:text-slate-400 break-all line-clamp-2">
         {item.url}
       </div>
-
       <div className="flex items-center justify-between mt-auto pt-2">
         <span className="text-xs text-slate-400">
           {item.completedAt ? format(item.completedAt) : 'Unknown'}
@@ -99,8 +96,4 @@ function PlatformIcon({ platform }: { platform: Platform }) {
     case 'tiktok': return <Music {...props} className="w-5 h-5 text-black dark:text-white" />;
     default: return <HelpCircle {...props} />;
   }
-}
-
-function HistoryIcon(props: any) {
-  return <History {...props} />;
 }

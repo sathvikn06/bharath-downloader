@@ -162,7 +162,7 @@ export function DownloaderView() {
                 {download.thumbnail && download.status !== 'preview' ? (
                   <img src={download.thumbnail} alt="Thumbnail" className="w-full h-full object-cover grayscale opacity-80" />
                 ) : (
-                  <Grid2x2 className={`w-8 h-8 ${download.status === 'completed' ? 'text-black dark:text-white' : 'text-black/30 dark:text-white/30'}`} />
+                  <Grid2x2 className={`w-8 h-8 ${download.progress === 100 ? 'text-black dark:text-white' : 'text-black/30 dark:text-white/30'}`} />
                 )}
               </div>
               
@@ -170,14 +170,14 @@ export function DownloaderView() {
                 <div className="flex justify-between items-start mb-2 border-b border-black/10 dark:border-white/10 pb-2">
                   <p className="text-sm font-medium line-clamp-1 pr-4">{download.title || download.url}</p>
                   <span className="text-[10px] font-bold font-dot tracking-widest uppercase text-black/50 dark:text-white/50">
-                    {download.status === 'completed' ? 'DONE' : download.status === 'preview' ? 'READY' : `${Math.round(download.progress)}%`}
+                    {download.progress === 100 ? 'DONE' : download.status === 'preview' ? 'READY' : `${Math.round(download.progress)}%`}
                   </span>
                 </div>
                 
                 {download.status !== 'preview' && download.status !== 'completed' && (
                   <div className="h-px w-full bg-black/10 dark:bg-white/10 mt-4 overflow-hidden">
                     <motion.div 
-                      className={`h-full ${download.status === 'completed' ? 'bg-black dark:bg-white' : 'bg-black dark:bg-white'}`}
+                      className={`h-full ${download.progress === 100 ? 'bg-black dark:bg-white' : 'bg-black dark:bg-white'}`}
                       initial={{ width: 0 }}
                       animate={{ width: `${download.progress}%` }}
                       transition={{ duration: 0.2 }}

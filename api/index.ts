@@ -4,12 +4,10 @@ import youtubedl from 'youtube-dl-exec';
 import { ZipArchive } from 'archiver';
 import { Readable } from 'stream';
 import { spawn } from 'child_process';
-import studioRouter from './studio.js';
 
 const app = express();
 app.use(express.json());
 
-app.use('/api/studio', studioRouter);
 
 app.post('/api/info', async (req, res) => {
   try {
