@@ -275,9 +275,9 @@ app.get('/api/download', async (req, res) => {
            });
            if (mediaResponse.ok && mediaResponse.body) {
                const fileName = format === 'audio/mp3' ? 'audio.mp3' : format === 'image/jpeg' ? 'image.jpg' : 'download.mp4';
-               res.header('Content-Type', format);
+               res.header('Content-Type', format as string);
                res.header('Content-Disposition', `${disposition}; filename="${fileName}"`);
-               Readable.fromWeb(mediaResponse.body).pipe(res);
+               Readable.fromWeb(mediaResponse.body as import('stream/web').ReadableStream).pipe(res);
                return;
            } else {
                return res.status(500).send('Direct fetch failed');
