@@ -140,7 +140,18 @@ export default function App() {
           <HistoryView />
         </motion.div>
 
-      </main>
+            </main>
+      
+      {/* Footer */}
+      <footer className="w-full border-t border-black/10 dark:border-white/10 py-8 text-center bg-[#c2c6cc] dark:bg-[#0a0a0a]">
+         <div className="flex items-center justify-center gap-2 text-black/50 dark:text-white/50 text-xs font-dot tracking-widest uppercase">
+            <Grid2x2 className="w-4 h-4" />
+            <span>Media Engine © 2026</span>
+         </div>
+         <p className="text-[10px] text-black/40 dark:text-white/40 mt-2 font-mono uppercase">
+            Powered by Gemini API & FFmpeg
+         </p>
+      </footer>
     </div>
   );
 }

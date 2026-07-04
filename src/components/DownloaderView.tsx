@@ -107,7 +107,7 @@ export function DownloaderView() {
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           placeholder="Paste media link here..."
-          className="w-full bg-transparent border-b-2 border-black/20 dark:border-white/20 px-4 py-4 text-xl md:text-2xl focus:border-black dark:focus:border-white outline-none transition-all placeholder:text-black/30 dark:placeholder:text-white/30 font-sans"
+          className="w-full bg-transparent border-b-2 border-black/20 dark:border-white/20 px-4 py-4 pr-32 sm:pr-80 text-xl md:text-2xl focus:border-black dark:focus:border-white outline-none transition-all placeholder:text-black/30 dark:placeholder:text-white/30 font-sans"
           required
         />
         <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-4">
@@ -141,6 +141,13 @@ export function DownloaderView() {
           </button>
         </div>
       </form>
+      <AnimatePresence>
+         {(url.includes('youtube.com') || url.includes('youtu.be') || url.includes('tiktok.com')) && (quality === 'highest' || quality === 'high') && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="text-[10px] font-mono text-black/50 dark:text-white/50 -mt-8 px-4">
+               Note: 1080p may be unavailable for this platform due to bot-protections. The highest available standard resolution will be downloaded.
+            </motion.div>
+         )}
+      </AnimatePresence>
 
       {/* Format Selector Mobile */}
       <div className="flex justify-center sm:hidden">

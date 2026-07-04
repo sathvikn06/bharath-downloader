@@ -24,8 +24,14 @@ export function BatchDownloaderView() {
       const res = await fetch('/api/batch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ urls: urlList, format })
+        body: JSON.stringify({ urls: urlList, format, quality })
       });
+
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+         const errData = await res.json();
+         throw new Error(errData.error || 'Batch processing failed');
+      }
 
       if (!res.ok) {
         throw new Error('Batch processing failed');
@@ -107,6 +113,13 @@ export function BatchDownloaderView() {
           </button>
         </div>
       </form>
+      <AnimatePresence>
+         {(urls.includes('youtube.com') || urls.includes('youtu.be') || urls.includes('tiktok.com')) && (quality === 'highest' || quality === 'high') && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="text-[10px] font-mono text-black/50 dark:text-white/50 -mt-2 px-4">
+               Note: 1080p may be unavailable for some platforms due to bot-protections. The highest available standard resolution will be downloaded.
+            </motion.div>
+         )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {error && (

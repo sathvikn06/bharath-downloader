@@ -48,6 +48,7 @@
     "vite": "^6.2.3",
     "xss-clean": "^0.1.4",
     "youtube-dl-exec": "^3.1.8",
+    "youtube-ext": "^1.1.25",
     "youtubei.js": "^17.2.0"
   },
   "devDependencies": {
