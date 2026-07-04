@@ -7,6 +7,7 @@ import { BatchDownloaderView } from './components/BatchDownloaderView';
 import { InspectorView } from './components/InspectorView';
 import { AnalyzerView } from './components/AnalyzerView';
 import { HistoryView } from './components/HistoryView';
+import { StrawHatCrew } from './components/StrawHatCrew';
 
 export default function App() {
   const { theme, toggleTheme } = useTheme();
@@ -143,6 +144,7 @@ export default function App() {
             </main>
       
       {/* Footer */}
+      <StrawHatCrew />
       <footer className="w-full border-t border-black/10 dark:border-white/10 py-8 text-center bg-[#c2c6cc] dark:bg-[#0a0a0a]">
          <div className="flex items-center justify-center gap-2 text-black/50 dark:text-white/50 text-xs font-dot tracking-widest uppercase">
             <Grid2x2 className="w-4 h-4" />
